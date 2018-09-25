@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import ru.orehovai.easycar.R;
+
+
 public class OrdersActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
