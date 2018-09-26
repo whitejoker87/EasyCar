@@ -75,7 +75,7 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword">
+        app:layout_constraintTop_toBottomOf="@+id/tvLostPassword">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/etConfirmPassword"
@@ -88,16 +88,61 @@
 
     <TextView
         android:id="@+id/tvLostPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="18dp"
         android:text="Забыли пароль?"
         android:textColor="@color/colorPrimary"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="179dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/vg_oferta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutConfirmPassword">
+
+        <ImageView
+            android:id="@+id/iv_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/info"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_oferta_agree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Согласен с условиями оферты"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_info"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/sw_oferta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:theme="@style/SwitchCompatTheme"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <Button
         android:id="@+id/btnNext"

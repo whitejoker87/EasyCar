@@ -15,4 +15,7 @@
     <style name="ErrorText" parent="TextAppearance.AppCompat.Small">
         <item name="android:textColor">@color/colorAccent</item>
     </style>
+    <style name = "SwitchCompatTheme">
+        <item name = "colorControlActivated">@color/colorPrimary</item>
+    </style>
 </resources>
