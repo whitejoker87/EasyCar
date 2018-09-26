@@ -16,7 +16,8 @@
         android:layout_marginEnd="8dp"
         android:text="@string/hello_blank_fragment"
         android:textColorLink="@color/colorPrimary"
-        android:textSize="30sp"
+        android:textSize="40sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,32 +30,31 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvWelcome"
-        app:errorEnabled="true">
+        app:layout_constraintTop_toBottomOf="@+id/tvWelcome">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/etEmail"
-            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ems="10"
             android:hint="Введите email"
-            android:ems="10"/>
+            android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayoutPassword"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmail"
-        app:errorEnabled="true">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutEmail">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/etPassword"
@@ -65,16 +65,15 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayoutConfirmPassword"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword"
-        app:errorEnabled="true">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/etConfirmPassword"
@@ -82,5 +81,31 @@
             android:layout_height="wrap_content"
             android:hint="Подтвердите пароль" />
     </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvLostPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Забыли пароль?"
+        android:textColor="@color/colorPrimary"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="179dp" />
+
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Далее"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,15 +1,18 @@
 package ru.orehovai.easycar.ui;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -51,6 +54,10 @@ public class LoginFragment extends Fragment {
     EditText etPassword;
     @BindView(R.id.etConfirmPassword)
     EditText etConfirmPassword;
+    @BindView(R.id.tvLostPassword)
+    TextView tvLostPassword;
+    @BindView(R.id.btnNext)
+    Button btnNext;
 
     private Unbinder unbinder;
 
@@ -135,6 +142,7 @@ public class LoginFragment extends Fragment {
 //    }
     @OnTextChanged(R.id.etEmail)
     void onEmailTextChange() {
+        etPassword.setText("");
         if (Patterns.EMAIL_ADDRESS.matcher(etEmail.getText()).matches()) {
             if (etEmail.getText().toString().equals("test@test.ru")) {
 
@@ -142,20 +150,14 @@ public class LoginFragment extends Fragment {
                 textInputLayoutEmail.setHintTextAppearance(R.style.ErrorTextSuccess);
                 textInputLayoutEmail.setError("Email correct!");
                 textInputLayoutConfirmPassword.setVisibility(View.GONE);
-
-
-//                    externalErrorView_.setVisibility(View.VISIBLE);
-//                    externalErrorView_.setText(error);
-                } else {
-//                    externalErrorView_.setVisibility(View.GONE);
+                tvLostPassword.setVisibility(View.VISIBLE);
+            } else {
                     textInputLayoutEmail.setErrorTextAppearance(R.style.ErrorText);
                     textInputLayoutEmail.setHintTextAppearance(R.style.ErrorText);
                     textInputLayoutEmail.setError("email not registered");
                     textInputLayoutPassword.setVisibility(View.VISIBLE);
                     textInputLayoutConfirmPassword.setVisibility(View.VISIBLE);
-
-
-
+                    tvLostPassword.setVisibility(View.GONE);
             }
 
         } else {
@@ -163,7 +165,36 @@ public class LoginFragment extends Fragment {
             textInputLayoutEmail.setHintTextAppearance(R.style.ErrorText);
             textInputLayoutEmail.setError("");
             textInputLayoutPassword.setVisibility(View.GONE);
+            tvLostPassword.setVisibility(View.GONE);
             textInputLayoutConfirmPassword.setVisibility(View.GONE);
         }
+    }
+    @OnTextChanged(R.id.etPassword)
+    void onPasswordTextChange() {
+        etConfirmPassword.setText("");
+        if (!TextUtils.isEmpty(etPassword.getText()) && (etPassword.getText().length() < 8)) {
+            textInputLayoutPassword.setError("Не меньше 8 символов");
+        } else {
+            if (etPassword.getText().length() > 7 && textInputLayoutConfirmPassword.getVisibility() == View.GONE) {
+                btnNext.setText("Далее");
+                btnNext.setVisibility(View.VISIBLE);
+            } else btnNext.setVisibility(View.GONE);
+            textInputLayoutPassword.setError("");
+        }
+    }
+    @OnTextChanged(R.id.etConfirmPassword)
+    void  onConfirmPasswordTextChange() {
+        textInputLayoutEmail.setError("");
+        btnNext.setVisibility(View.GONE);
+        if (!TextUtils.isEmpty(etConfirmPassword.getText()) && (etConfirmPassword.getText().length() < 8)) {
+            textInputLayoutConfirmPassword.setError("Не меньше 8 символов");
+        } else
+            if (!(etConfirmPassword.getText().toString().equals(etPassword.getText().toString()))) {
+                textInputLayoutConfirmPassword.setError("Пароли не совпадают");
+            } else {
+                btnNext.setText("Регистрация");
+                btnNext.setVisibility(View.VISIBLE);
+                textInputLayoutConfirmPassword.setError("");
+            }
     }
 }

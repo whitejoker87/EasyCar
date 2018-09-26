@@ -2,7 +2,7 @@
     <string name="app_name">EasyCar</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Добро пожаловать!!!</string>
+    <string name="hello_blank_fragment">Добро пожаловать</string>
     <string name="title_activity_orders">OrdersActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
