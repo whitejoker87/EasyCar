@@ -60,6 +60,8 @@
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
             android:hint="Введите пароль" />
     </android.support.design.widget.TextInputLayout>
 
@@ -79,6 +81,8 @@
             android:id="@+id/etConfirmPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
             android:hint="Подтвердите пароль" />
     </android.support.design.widget.TextInputLayout>
 
