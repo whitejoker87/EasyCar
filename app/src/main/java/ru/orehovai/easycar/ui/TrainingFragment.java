@@ -1,14 +1,30 @@
 package ru.orehovai.easycar.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import ru.orehovai.easycar.R;
+import ru.orehovai.easycar.model.TrainingSlide;
+import ru.orehovai.easycar.viewmodel.TrainingViewModel;
 
 
 /**
@@ -28,6 +44,16 @@ public class TrainingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    TrainingViewModel model;
+    List<View> pages;
+
+    @BindView(R.id.pager)
+    ViewPager mImageViewPager;
+    @BindView(R.id.tabDots)
+    TabLayout tabLayout;
+
+    private Unbinder unbinder;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -56,6 +82,26 @@ public class TrainingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        model = ViewModelProviders.of(getActivity()).get(TrainingViewModel.class);
+
+        model.getListSlides().observe(this, new Observer<List<TrainingSlide>>() {
+            @Override
+            public void onChanged(@Nullable List<TrainingSlide> trainingSlides) {
+
+                if (trainingSlides != null && trainingSlides.size() > 0) {
+                    mImageViewPager.setAdapter(new TrainingViewPagerAdapter(getActivity(), trainingSlides, new IOnclickBtnSlide() {
+                        @Override
+                        public void onClickButtonCallback(int position) {
+                            nextSlide();
+                        }
+                    }));
+                }
+
+            }
+                // Update the UI.
+    });
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -65,8 +111,9 @@ public class TrainingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_training, container, false);
+        View view = inflater.inflate(R.layout.fragment_training, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -76,16 +123,18 @@ public class TrainingFragment extends Fragment {
 //        }
 //    }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
 //        } else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }
-//    }
+
+
+    }
 //
 //    @Override
 //    public void onDetach() {
@@ -107,4 +156,28 @@ public class TrainingFragment extends Fragment {
 //        // TODO: Update argument type and name
 //        void onFragmentInteraction(Uri uri);
 //    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //mImageViewPager = (ViewPager) view.findViewById(R.id.pager);
+        //TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabDots);
+        tabLayout.setupWithViewPager(mImageViewPager, true);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    public void nextSlide() {
+        if(mImageViewPager.getCurrentItem() < model.getListSlides().getValue().size()) {
+            mImageViewPager.setCurrentItem(mImageViewPager.getCurrentItem() + 1);
+        } else if (mImageViewPager.getCurrentItem() == model.getListSlides().getValue().size())
+            Toast.makeText(getActivity(), "переход на другой фрагмент", Toast.LENGTH_LONG).show();
+    }
+
+
 }

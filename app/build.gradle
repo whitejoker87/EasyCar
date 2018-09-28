@@ -18,6 +18,9 @@ android {
         }
     }
     buildToolsVersion '28.0.2'
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -35,13 +38,13 @@ dependencies {
 
 
 
-    //    // ViewModel and LiveData
+        // ViewModel and LiveData
 
-    //    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+        implementation "android.arch.lifecycle:extensions:$lifecycle_version"
 
-    //
 
-    //    annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
+
+        annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
 
     //
 

@@ -5,8 +5,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SwitchCompat;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -14,10 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 import ru.orehovai.easycar.R;
@@ -58,8 +63,26 @@ public class LoginFragment extends Fragment {
     TextView tvLostPassword;
     @BindView(R.id.btnNext)
     Button btnNext;
+    @BindView(R.id.vg_oferta)
+    ViewGroup vgOferta;
+    @BindView(R.id.iv_info)
+    ImageView ivInfo;
+    @BindView(R.id.tv_oferta_agree)
+    TextView tvOfertaAgree;
+    @BindView(R.id.sw_oferta)
+    SwitchCompat swOferta;
 
     private Unbinder unbinder;
+
+    private boolean accountEnabled;
+
+    public boolean isAccountEnabled() {
+        return accountEnabled;
+    }
+
+    public void setAccountEnabled(boolean accountEnabled) {
+        this.accountEnabled = accountEnabled;
+    }
 
     //private OnFragmentInteractionListener mListener;
 
@@ -102,6 +125,11 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {
@@ -109,18 +137,25 @@ public class LoginFragment extends Fragment {
 //        }
 //    }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        accountEnabled = false;//при загрузке фрагмента
 //        if (context instanceof OnFragmentInteractionListener) {
 //            //mListener = (OnFragmentInteractionListener) context;
 //        } else {
 //            throw new RuntimeException(context.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }
-//    }
+    }
 
-//    @Override
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+    //    @Override
 //    public void onDetach() {
 //        super.onDetach();
 //        mListener = null;
@@ -140,11 +175,14 @@ public class LoginFragment extends Fragment {
 //        // TODO: Update argument type and name
 //        void onFragmentInteraction(Uri uri);
 //    }
+
     @OnTextChanged(R.id.etEmail)
     void onEmailTextChange() {
         etPassword.setText("");
         if (Patterns.EMAIL_ADDRESS.matcher(etEmail.getText()).matches()) {
             if (etEmail.getText().toString().equals("test@test.ru")) {
+
+                setAccountEnabled(true);
 
                 textInputLayoutEmail.setErrorTextAppearance(R.style.ErrorTextSuccess);
                 textInputLayoutEmail.setHintTextAppearance(R.style.ErrorTextSuccess);
@@ -169,32 +207,58 @@ public class LoginFragment extends Fragment {
             textInputLayoutConfirmPassword.setVisibility(View.GONE);
         }
     }
+
     @OnTextChanged(R.id.etPassword)
     void onPasswordTextChange() {
         etConfirmPassword.setText("");
-        if (!TextUtils.isEmpty(etPassword.getText()) && (etPassword.getText().length() < 8)) {
-            textInputLayoutPassword.setError("Не меньше 8 символов");
-        } else {
-            if (etPassword.getText().length() > 7 && textInputLayoutConfirmPassword.getVisibility() == View.GONE) {
-                btnNext.setText("Далее");
-                btnNext.setVisibility(View.VISIBLE);
-            } else btnNext.setVisibility(View.GONE);
-            textInputLayoutPassword.setError("");
+        if (!TextUtils.isEmpty(etPassword.getText())) {
+            if (etPassword.getText().length() < 8 ) {
+                textInputLayoutPassword.setError("Не меньше 8 символов");
+                vgOferta.setVisibility(View.GONE);
+            } else {
+                textInputLayoutPassword.setError("");
+                if (textInputLayoutConfirmPassword.getVisibility() == View.GONE) {
+                    vgOferta.setVisibility(View.VISIBLE);
+                } else vgOferta.setVisibility(View.GONE);
+            }
+
         }
     }
+
     @OnTextChanged(R.id.etConfirmPassword)
     void  onConfirmPasswordTextChange() {
         textInputLayoutEmail.setError("");
-        btnNext.setVisibility(View.GONE);
-        if (!TextUtils.isEmpty(etConfirmPassword.getText()) && (etConfirmPassword.getText().length() < 8)) {
-            textInputLayoutConfirmPassword.setError("Не меньше 8 символов");
-        } else
-            if (!(etConfirmPassword.getText().toString().equals(etPassword.getText().toString()))) {
+        vgOferta.setVisibility(View.GONE);
+        if (!TextUtils.isEmpty(etConfirmPassword.getText())) {
+            if (etConfirmPassword.getText().length() < 8) {
+                textInputLayoutConfirmPassword.setError("Не меньше 8 символов");
+            } else if (!(etConfirmPassword.getText().toString().equals(etPassword.getText().toString()))) {
                 textInputLayoutConfirmPassword.setError("Пароли не совпадают");
             } else {
+                textInputLayoutConfirmPassword.setError("");
+                vgOferta.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @OnCheckedChanged(R.id.sw_oferta)
+    void onSwOfertaCheck() {
+        if (swOferta.isChecked()){
+            if (isAccountEnabled()){
+                btnNext.setText("Далее");
+            } else {
                 btnNext.setText("Регистрация");
-                btnNext.setVisibility(View.VISIBLE);
                 textInputLayoutConfirmPassword.setError("");
             }
+            btnNext.setVisibility(View.VISIBLE);
+        } else btnNext.setVisibility(View.GONE);
+
+    }
+
+    @OnClick(R.id.btnNext)
+    void onClickNext() {
+        if (isAccountEnabled()){
+
+        }
     }
 }
