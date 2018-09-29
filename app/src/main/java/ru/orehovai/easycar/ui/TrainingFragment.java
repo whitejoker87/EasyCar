@@ -10,8 +10,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -53,7 +57,12 @@ public class TrainingFragment extends Fragment {
     @BindView(R.id.tabDots)
     TabLayout tabLayout;
 
+
     private Unbinder unbinder;
+
+    public static String LOG_TAG = "my_log";
+
+    //private GestureDetector tapGestureDetector;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -106,6 +115,8 @@ public class TrainingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -164,6 +175,21 @@ public class TrainingFragment extends Fragment {
         //mImageViewPager = (ViewPager) view.findViewById(R.id.pager);
         //TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabDots);
         tabLayout.setupWithViewPager(mImageViewPager, true);
+//        tapGestureDetector = new GestureDetector(getActivity(), new GestureDetector.SimpleOnGestureListener() {
+//            @Override
+//            public boolean onSingleTapConfirmed(MotionEvent e) {
+//               //nextSlide();
+//
+//               return false;
+//            }
+//        });
+
+//        mImageViewPager.setOnTouchListener(new View.OnTouchListener() {
+//            public boolean onTouch(View v, MotionEvent event) {
+//                tapGestureDetector.onTouchEvent(event);
+//                return false;
+//            }
+//        });
     }
 
     @Override
@@ -173,9 +199,11 @@ public class TrainingFragment extends Fragment {
     }
 
     public void nextSlide() {
-        if(mImageViewPager.getCurrentItem() < model.getListSlides().getValue().size()) {
-            mImageViewPager.setCurrentItem(mImageViewPager.getCurrentItem() + 1);
-        } else if (mImageViewPager.getCurrentItem() == model.getListSlides().getValue().size())
+        Log.d(LOG_TAG, mImageViewPager.getCurrentItem() + "  " + model.getListSlides().getValue().size());
+        if(mImageViewPager.getCurrentItem() < model.getListSlides().getValue().size() - 1) {
+            mImageViewPager.setCurrentItem(mImageViewPager.getCurrentItem() + 1,  true);
+        }
+        else
             Toast.makeText(getActivity(), "переход на другой фрагмент", Toast.LENGTH_LONG).show();
     }
 
