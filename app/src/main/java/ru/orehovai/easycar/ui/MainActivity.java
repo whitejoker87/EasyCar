@@ -1,6 +1,7 @@
 package ru.orehovai.easycar.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,12 @@ import ru.orehovai.easycar.viewmodel.TrainingViewModel;
 public class MainActivity extends AppCompatActivity {
 
     TrainingViewModel model;
+    TrainingFragment trainingFragment;
+    LoginFragment loginFragment;
+
+    private boolean isFirstLaunch;
+    private SharedPreferences sPref;
+    private static final String FIRST_LAUNCH_FLAG = "firstLaunch";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         slides.add(firstSlide);
 
         TrainingSlide secondSlide = new TrainingSlide();
-        secondSlide.setIvTrainingID(R.drawable.giftcard);
+        secondSlide.setIvTrainingID(R.drawable.people);
         secondSlide.setTvTitleTraining("Делитесь с друзьями");
         secondSlide.setTvDescrTraining("Ваш знакомый или друг пользуется этим приложением? " +
                 "спроситеу него промокод, " +
@@ -48,14 +55,34 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        TrainingFragment trainingFragment = new TrainingFragment();
-        LoginFragment fragment = new LoginFragment();
-        setFragment(trainingFragment);
+        loginFragment = new LoginFragment();
+
+        sPref = getSharedPreferences("loginSavedData", MODE_PRIVATE);
+        saveLaunchFlag(true);//для отладки первого запуска
+        isFirstLaunch = sPref.getBoolean(FIRST_LAUNCH_FLAG, true);
+        if(isFirstLaunch){
+            trainingFragment = new TrainingFragment();
+            setFragment(trainingFragment);
+        } else setFragment(loginFragment);
     }
 
-    private void setFragment(Fragment fragment){
+    public void setFragment(Fragment fragment){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container_login, fragment);
         transaction.commit();
+    }
+    public void setFragment() {
+        setFragment(loginFragment);
+    }
+
+    public void saveLaunchFlag(){
+        SharedPreferences.Editor editor = sPref.edit();
+        editor.putBoolean(FIRST_LAUNCH_FLAG, false);
+        editor.apply();
+    }
+    public void saveLaunchFlag(boolean reset){//для отладки первого запуска
+        SharedPreferences.Editor editor = sPref.edit();
+        editor.putBoolean(FIRST_LAUNCH_FLAG, reset);
+        editor.apply();
     }
 }

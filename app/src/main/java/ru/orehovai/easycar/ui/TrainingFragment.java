@@ -10,13 +10,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,7 +58,12 @@ public class TrainingFragment extends Fragment {
     @BindView(R.id.tabDots)
     TabLayout tabLayout;
 
+
     private Unbinder unbinder;
+
+    public static String LOG_TAG = "my_log";
+
+    //private GestureDetector tapGestureDetector;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -106,6 +116,8 @@ public class TrainingFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -161,8 +173,6 @@ public class TrainingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //mImageViewPager = (ViewPager) view.findViewById(R.id.pager);
-        //TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabDots);
         tabLayout.setupWithViewPager(mImageViewPager, true);
     }
 
@@ -173,11 +183,13 @@ public class TrainingFragment extends Fragment {
     }
 
     public void nextSlide() {
-        if(mImageViewPager.getCurrentItem() < model.getListSlides().getValue().size()) {
-            mImageViewPager.setCurrentItem(mImageViewPager.getCurrentItem() + 1);
-        } else if (mImageViewPager.getCurrentItem() == model.getListSlides().getValue().size())
-            Toast.makeText(getActivity(), "переход на другой фрагмент", Toast.LENGTH_LONG).show();
+        Log.d(LOG_TAG, mImageViewPager.getCurrentItem() + "  " + Objects.requireNonNull(model.getListSlides().getValue()).size());
+        if(mImageViewPager.getCurrentItem() < model.getListSlides().getValue().size() - 1) {
+            mImageViewPager.setCurrentItem(mImageViewPager.getCurrentItem() + 1,  true);
+        }
+        else {
+            ((MainActivity)Objects.requireNonNull(getActivity())).saveLaunchFlag();
+            ((MainActivity)Objects.requireNonNull(getActivity())).setFragment();
+        }
     }
-
-
 }
