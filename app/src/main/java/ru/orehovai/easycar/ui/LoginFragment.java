@@ -179,6 +179,8 @@ public class LoginFragment extends Fragment {
     @OnTextChanged(R.id.etEmail)
     void onEmailTextChange() {
         etPassword.setText("");
+        btnNext.setVisibility(View.GONE);
+        swOferta.setChecked(false);
         if (Patterns.EMAIL_ADDRESS.matcher(etEmail.getText()).matches()) {
             if (etEmail.getText().toString().equals("test@test.ru")) {
 
@@ -190,15 +192,21 @@ public class LoginFragment extends Fragment {
                 textInputLayoutConfirmPassword.setVisibility(View.GONE);
                 tvLostPassword.setVisibility(View.VISIBLE);
             } else {
-                    textInputLayoutEmail.setErrorTextAppearance(R.style.ErrorText);
-                    textInputLayoutEmail.setHintTextAppearance(R.style.ErrorText);
-                    textInputLayoutEmail.setError("email not registered");
-                    textInputLayoutPassword.setVisibility(View.VISIBLE);
-                    textInputLayoutConfirmPassword.setVisibility(View.VISIBLE);
-                    tvLostPassword.setVisibility(View.GONE);
+
+                setAccountEnabled(false);
+
+                textInputLayoutEmail.setErrorTextAppearance(R.style.ErrorText);
+                textInputLayoutEmail.setHintTextAppearance(R.style.ErrorText);
+                textInputLayoutEmail.setError("email not registered");
+                textInputLayoutPassword.setVisibility(View.VISIBLE);
+                textInputLayoutConfirmPassword.setVisibility(View.VISIBLE);
+                tvLostPassword.setVisibility(View.GONE);
             }
 
         } else {
+
+            setAccountEnabled(false);
+
             textInputLayoutEmail.setErrorTextAppearance(R.style.ErrorText);
             textInputLayoutEmail.setHintTextAppearance(R.style.ErrorText);
             textInputLayoutEmail.setError("");
